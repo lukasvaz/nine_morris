@@ -3,5 +3,4 @@ const Piece = ({ cx, cy, color, handleClick }) => {
     return <circle cx={cx} cy={cy} r={radius} fill={color} onClick={handleClick} />
   }
 
-
 export default Piece;
