@@ -8,7 +8,7 @@ const Piece = ({ cx, cy,index }) => {
   : gameState.board[index]  === DEFAULT_CONFIGURATION.PLAYER2.ID ? DEFAULT_CONFIGURATION.PLAYER2.COLOR : "transparent"
   
   const updateContext = () => {
-    const [newBoard, newTurn, newstate] = gameState[gameState.turn].state.update(index, gameState.board, gameState.turn)
+    const [newBoard, newTurn, newstate] = gameState[gameState.turn].state.update(index, gameState)
     setGameState({
       ...gameState,
       "board": newBoard,

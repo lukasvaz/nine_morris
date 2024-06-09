@@ -22,28 +22,26 @@ class Positioning {
     isValidMove(index, board, turn) {
         return board[index] == null
     }
-    update(index, board, turn) {
-
+    update(index, context) {
         // click on an ocupped position
-        if (!this.isValidMove(index, board, turn)) {
+        if (!this.isValidMove(index, context.board, context.turn)) {
             console.log("invalid move")
-            return [board, turn, this]
+            return [context.board, context.turn, this]
         }
-
         // click on a free position
         else {
             //update board
-            let newBoard = [...board]
-            newBoard[index] = turn
+            let newBoard = [... context.board]
+            newBoard[index] = context.turn
             //if theres any elination  change state to Eliminating
-            if (checkElimination(newBoard, turn, index)) {
+            if (checkElimination(newBoard, context.turn, index)) {
                 console.log("to eliminate status")
-                let newTurn = turn
+                let newTurn = context.turn
                 let newState = new Eliminating()
                 return [newBoard, newTurn, newState]
             }
             else {
-                let newTurn = getOppositePlayer(turn)
+                let newTurn = getOppositePlayer(context.turn)
                 return [newBoard, newTurn, this]
             }
         }
@@ -54,22 +52,19 @@ class Eliminating {
     isValidMove(index, board, turn) {
         console.log(board[index] == getOppositePlayer(turn))
         return board[index] == getOppositePlayer(turn)
-
     }
-    update(index, board, turn) {
+    update(index,context) {
         // click on an invalid position
-        if (!this.isValidMove(index, board, turn)) {
+        if (!this.isValidMove(index, context.board, context.turn)) {
             console.log("invalid move")
-            return [board, turn, this]
-
+            return [context.board, context.turn, this]
         }
-
         // clicks on an opponent piece
         else {
-            //eliminate that piece and update state to positioning
-            let newBoard = [...board]
+            //context.eliminate that piece and update state to positioning
+            let newBoard = [...context.board]
             newBoard[index] = null
-            let newTurn = getOppositePlayer(turn)
+            let newTurn = getOppositePlayer(context.turn)
             let newState = new Positioning()
             console.log("to positioning status")
             return [newBoard, newTurn, newState]
