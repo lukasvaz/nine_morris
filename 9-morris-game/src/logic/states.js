@@ -16,8 +16,6 @@ function getOppositePlayer(turn) {
 // chequear movimiento sea valido
 // si no valido-> retoranr el mismo estado
 // si es valido-> chequar  si hay eliminación y actualizar estados
-
-
 class Positioning {
     isValidMove(index, board, turn) {
         return board[index] == null
@@ -25,52 +23,60 @@ class Positioning {
     update(index, context) {
         // click on an ocupped position
         if (!this.isValidMove(index, context.board, context.turn)) {
-            console.log("invalid move")
-            return [context.board, context.turn, this]
+            console.log("Positioning:invalid move")
+            return context
         }
-        // click on a free position
+        //update context
+        let newContext = {...context}
+        newContext.board[index] = context.turn
+        newContext[context.turn].onGamePieces.push(index)
+        newContext[context.turn].playedPieces += 1
+
+        //if theres any elimination  change state to Eliminating
+        if (checkElimination(newContext.board, newContext.turn, index)) {
+            console.log("to eliminate status")
+            let newState = new Eliminating()
+            newContext[context.turn].state = newState
+            return newContext
+        }
         else {
-            //update board
-            let newBoard = [... context.board]
-            newBoard[index] = context.turn
-            //if theres any elination  change state to Eliminating
-            if (checkElimination(newBoard, context.turn, index)) {
-                console.log("to eliminate status")
-                let newTurn = context.turn
-                let newState = new Eliminating()
-                return [newBoard, newTurn, newState]
-            }
-            else {
-                let newTurn = getOppositePlayer(context.turn)
-                return [newBoard, newTurn, this]
-            }
+            newContext.turn = getOppositePlayer(context.turn)
+            newContext[context.turn].state = context[context.turn].playedPieces==9? new Playing(): new Positioning() 
+            return newContext
         }
     }
 }
 
+
 class Eliminating {
     isValidMove(index, board, turn) {
-        console.log(board[index] == getOppositePlayer(turn))
         return board[index] == getOppositePlayer(turn)
     }
-    update(index,context) {
+    update(index, context) {
         // click on an invalid position
         if (!this.isValidMove(index, context.board, context.turn)) {
-            console.log("invalid move")
-            return [context.board, context.turn, this]
+            console.log("Eliminating:invalid move")
+            return context
         }
         // clicks on an opponent piece
         else {
             //context.eliminate that piece and update state to positioning
-            let newBoard = [...context.board]
-            newBoard[index] = null
-            let newTurn = getOppositePlayer(context.turn)
-            let newState = new Positioning()
+            let newContext = {...context}
             console.log("to positioning status")
-            return [newBoard, newTurn, newState]
+            newContext.board[index] = null
+            newContext[context.turn].state = newContext[context.turn].playedPieces===9? new Playing(): new Positioning() 
+            // updating opoonent status
+            let newTurn=getOppositePlayer(context.turn)
+            newContext[newTurn].onGamePieces = newContext[newTurn].onGamePieces.filter(i => i !== index)            
+            newContext.turn =  newTurn
+            return newContext
         }
 
     }
 }
 
+class Playing {
+update(index, context) {
+  return context
+}}
 export { Positioning }

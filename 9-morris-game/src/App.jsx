@@ -8,12 +8,11 @@ export const GameContext=createContext(null)
 
 const App = (() => {
   const [gameState,setGameState]=useState({"winner": 0,
-  "P1": { "state": new Positioning(), "onGamePieces": [] },
-  "P2": { "state": new Positioning(), "onGamePieces": [] },
+  "P1": { "state": new Positioning(), "onGamePieces": [],"playedPieces":0 },
+  "P2": { "state": new Positioning(), "onGamePieces": [],"playedPieces":0 },
   "board": Array(24).fill(null),
   "turn": DEFAULT_CONFIGURATION.PLAYER1["ID"]
 })
-
   return (
     <div className="App">
     <GameContext.Provider value ={{gameState,setGameState}} >
