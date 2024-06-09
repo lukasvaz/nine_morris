@@ -1,3 +1,2 @@
-import Game from './Game/Game'
-
-export default Game;
+import Board from "./Board";
+export {Board}
