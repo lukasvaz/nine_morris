@@ -1,5 +1,5 @@
 import DEFAULT_CONFIGURATION from "../config/default_configuration.json"
-import { BOARD_COMBOS } from "../utils/constants"
+import { BOARD_COMBOS,PIECE_MOVEMENTS } from "../utils/constants"
 
 function checkElimination(board, turn, index) {
     // combos for  position:
@@ -47,7 +47,6 @@ class Positioning {
     }
 }
 
-
 class Eliminating {
     isValidMove(index, board, turn) {
         return board[index] == getOppositePlayer(turn)
@@ -76,7 +75,46 @@ class Eliminating {
 }
 
 class Playing {
+selected_piece = null
+isValidMove(index, board, turn) {
+    if (this.selected_piece === null) {
+        return board[index] === turn
+    }
+    return PIECE_MOVEMENTS[this.selected_piece].includes(index) && board[index] === null        
+}
+
 update(index, context) {
-  return context
+    if (!this.isValidMove(index, context.board, context.turn)) {
+        console.log("Playing:invalid move")
+        this.selected_piece = null
+        return context
+    }
+    //selecting piece
+    if (this.selected_piece === null) {
+        this.selected_piece = index
+        return context
+    }
+    // moving piece
+    else {
+        let newContext = {...context}
+        // updating board and player status
+        newContext.board[this.selected_piece] = null
+        newContext.board[index] = context.turn
+        newContext[context.turn].onGamePieces = newContext[context.turn].onGamePieces.map(i => i === this.selected_piece ? index : i)
+        
+        this.selected_piece = null
+        // check for elimination
+        if (checkElimination(newContext.board, newContext.turn, index)) {
+            console.log("to eliminate status")
+            let newState = new Eliminating()
+            newContext[context.turn].state = newState
+        }
+        else {
+            newContext.turn = getOppositePlayer(context.turn)
+        }
+        console.log(newContext)
+        return newContext
+    }    
 }}
+
 export { Positioning }
