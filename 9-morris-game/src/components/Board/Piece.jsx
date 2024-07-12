@@ -8,7 +8,7 @@ const Piece = ({ cx, cy,index }) => {
   : gameState.board[index]  === DEFAULT_CONFIGURATION.PLAYER2.ID ? DEFAULT_CONFIGURATION.PLAYER2.COLOR : "transparent"
   
   const updateContext = () => {
-    const newContext = gameState[gameState.turn].state.update(index, gameState)
+    const newContext = gameState[gameState.turn]?gameState[gameState.turn].state.update(index, gameState):gameState
     setGameState(newContext)
   }
   const radius = 40
