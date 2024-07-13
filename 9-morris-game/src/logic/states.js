@@ -2,7 +2,6 @@ import DEFAULT_CONFIGURATION from "../config/default_configuration.json"
 import { BOARD_COMBOS, PIECE_MOVEMENTS } from "../utils/constants"
 
 function checkElimination(board, turn, index) {
-    // combos for  position:
     const triples = BOARD_COMBOS
     var value = triples[index].some(triple => triple.every(i => board[i] === turn)) ? true : false
     return value
@@ -27,21 +26,21 @@ class Positioning {
         }
         //update context
         let newContext = { ...context }
-        newContext.board[index] = context.turn
-        newContext[context.turn].onGamePieces.push(index)
-        newContext[context.turn].playedPieces += 1
-
+        this.setPiece(index, newContext)
         //if theres any elimination  change state to Eliminating
         if (checkElimination(newContext.board, newContext.turn, index)) {
             let newState = new Eliminating()
             newContext[context.turn].state = newState
             return newContext
-        }
-        else {
-            newContext.turn = getOppositePlayer(context.turn)
-            newContext[context.turn].state = context[context.turn].playedPieces == 9 ? new Playing() : new Positioning()
-            return newContext
-        }
+        }     
+        newContext.turn = getOppositePlayer(context.turn)
+        newContext[context.turn].state = context[context.turn].playedPieces == 9 ? new Playing() : new Positioning()
+        return newContext
+    }
+    setPiece(index, context) {
+        context.board[index] = context.turn
+        context[context.turn].onGamePieces.push(index)
+        context[context.turn].playedPieces += 1
     }
 }
 
@@ -114,7 +113,7 @@ class Playing {
         // moving piece
         let newContext = { ...context }
         this.movePiece(index, newContext)
-        
+
         // check for elimination
         if (checkElimination(newContext.board, newContext.turn, index)) {
             let newState = new Eliminating()
