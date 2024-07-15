@@ -6,7 +6,7 @@ import { BOARD_GEOMETRY, PIECES_CORDINATES } from "../../utils/constants"
 const Board = ({ color }) => {
   const { gameState, } = useContext(GameContext)
   return <>
-    <svg width="700" height="700">
+    <svg style={{width:"700" ,height:"700"}} >
       {BOARD_GEOMETRY.map((line, index) => {
         return <line key={index} x1={line.x1} y1={line.y1} x2={line.x2} y2={line.y2} stroke={color}></line>
       })}

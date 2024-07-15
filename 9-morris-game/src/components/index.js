@@ -1,2 +1,3 @@
 import Board from "./Board";
-export {Board}
+import {TurnPannel} from "./Layout";  
+export {Board,TurnPannel}
