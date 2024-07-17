@@ -189,4 +189,4 @@ class Loser {
         return context
     }
 }
-export { Positioning }
+export { Positioning,Eliminating,Playing,Ending,Winner,Loser,getOppositePlayer }
