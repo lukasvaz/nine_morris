@@ -1,2 +1,3 @@
 import TurnPannel from "./TurnPannel";
-export { TurnPannel}
+import PieceKeeper from "./PiecesKeeper";
+export { TurnPannel,PieceKeeper}

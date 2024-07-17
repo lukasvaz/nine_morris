@@ -7,7 +7,6 @@ import DEFAULT_CONFIGURATION from '../../config/default_configuration.json'
 const TurnPannel = () => {
   const { ID: player1, COLOR: colorPlayer1 } = DEFAULT_CONFIGURATION.PLAYER1
   const { ID: player2, COLOR: colorPlayer2 } = DEFAULT_CONFIGURATION.PLAYER2
-  console.log(DEFAULT_CONFIGURATION.PLAYER1)
 
   const { gameState, _ } = useContext(GameContext)
   const theme = useContext(ThemeContext)
