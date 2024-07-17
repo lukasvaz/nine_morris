@@ -4,21 +4,24 @@ import { GameContext } from "../../App"
 import { BOARD_GEOMETRY, PIECES_CORDINATES } from "../../utils/constants"
 import DEFAULT_CONFIGURATION from "../../config/default_configuration.json"
 import styled, { ThemeContext } from "styled-components"
-import { Eliminating,Playing,getOppositePlayer } from "../../logic/states"
+import { Eliminating, Playing, Ending, getOppositePlayer } from "../../logic/states"
 
 const Board = () => {
   const { gameState, setGameState } = useContext(GameContext)
-  const theme=useContext(ThemeContext)
+  const theme = useContext(ThemeContext)
 
   function updateContext(index) {
     const newContext = gameState[gameState.turn] ? gameState[gameState.turn].state.update(index, gameState) : gameState
-    setGameState({...newContext})
+    setGameState({ ...newContext })
   }
-  function handleIlumination(index){
-    if (gameState[gameState.turn].state instanceof Eliminating){
-      return gameState[getOppositePlayer(gameState.turn)].onGamePieces.includes(index)?theme.FILTERS.ELIMINATE:theme.FILTERS.DEFAULT  
-    }      
-    if (gameState[gameState.turn].state instanceof Playing && gameState[gameState.turn].state.selected_piece===index){
+  function handleIlumination(index) {
+    if (gameState.winner !== 0) {
+      return theme.FILTERS.DEFAULT
+    }
+    if (gameState[gameState.turn].state instanceof Eliminating) {
+      return gameState[getOppositePlayer(gameState.turn)].onGamePieces.includes(index) ? theme.FILTERS.ELIMINATE : theme.FILTERS.DEFAULT
+    }
+    if (gameState[gameState.turn].state.selected_piece === index) {
       return theme.FILTERS.SELECTED
     }
   }
@@ -33,7 +36,7 @@ const Board = () => {
         const [cx, cy] = PIECES_CORDINATES[index]
         const color = gameState.board[index] === DEFAULT_CONFIGURATION.PLAYER1.ID ? DEFAULT_CONFIGURATION.PLAYER1.COLOR
           : gameState.board[index] === DEFAULT_CONFIGURATION.PLAYER2.ID ? DEFAULT_CONFIGURATION.PLAYER2.COLOR : "transparent"
-        return <Piece key={index} cx={cx} cy={cy} color={color} handleClick={() => updateContext(index)} style={{filter:handleIlumination(index)}} />
+        return <Piece key={index} cx={cx} cy={cy} color={color} handleClick={() => updateContext(index)} style={{ filter: handleIlumination(index) }} />
       })}
     </svg>
   </>

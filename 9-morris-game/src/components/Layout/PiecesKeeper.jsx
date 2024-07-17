@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components'
-import { GameContext } from '../../App';
 import Piece from '../Board/Piece';
 
 const PieceKeeper = ({pieces,color}) => {

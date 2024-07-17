@@ -3,6 +3,7 @@ import styled, { ThemeContext } from 'styled-components'
 import { GameContext } from '../../App'
 import Piece from '../Board/Piece'
 import DEFAULT_CONFIGURATION from '../../config/default_configuration.json'
+import { Winner } from '../../logic/states'
 
 const TurnPannel = () => {
   const { ID: player1, COLOR: colorPlayer1 } = DEFAULT_CONFIGURATION.PLAYER1
@@ -11,17 +12,17 @@ const TurnPannel = () => {
   const { gameState, _ } = useContext(GameContext)
   const theme = useContext(ThemeContext)
 
-  function handlePlayerOneIlumination() {
-    return gameState.turn === player1 ? theme.FILTERS.SELECTED : theme.FILTERS.DEFAULT
+  function handlePlayerIlumination(player) {
+    if (gameState[player].state instanceof Winner) return theme.FILTERS.WINNER
+
+    return gameState.turn === player ? theme.FILTERS.SELECTED : theme.FILTERS.DEFAULT
   }
-  function handlePlayerTwoIlumination() {
-    return gameState.turn === player2 ? theme.FILTERS.SELECTED : theme.FILTERS.DEFAULT
-  }
+
   return <Pannel>
     <CustomSVG >
-      <Piece style={{ filter: handlePlayerOneIlumination() }} cx={80} cy={50} color={colorPlayer1}>
+      <Piece style={{ filter: handlePlayerIlumination(player1) }} cx={80} cy={50} color={colorPlayer1}>
       </Piece>
-      <Piece style={{ filter: handlePlayerTwoIlumination() }} cx={270} cy={50} color={colorPlayer2}></Piece>
+      <Piece style={{ filter: handlePlayerIlumination(player2) }} cx={270} cy={50} color={colorPlayer2}></Piece>
     </CustomSVG>
   </Pannel>
 }

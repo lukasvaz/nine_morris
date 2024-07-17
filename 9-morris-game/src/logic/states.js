@@ -32,7 +32,7 @@ class Positioning {
             let newState = new Eliminating()
             newContext[context.turn].state = newState
             return newContext
-        }     
+        }
         newContext.turn = getOppositePlayer(context.turn)
         newContext[context.turn].state = context[context.turn].playedPieces == 9 ? new Playing() : new Positioning()
         return newContext
@@ -189,4 +189,4 @@ class Loser {
         return context
     }
 }
-export { Positioning,Eliminating,Playing,Ending,Winner,Loser,getOppositePlayer }
+export { Positioning, Eliminating, Playing, Ending, Winner, Loser, getOppositePlayer }
