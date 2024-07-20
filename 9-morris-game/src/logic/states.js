@@ -10,9 +10,26 @@ function checkElimination(board, turn, index) {
 function getOppositePlayer(turn) {
     return turn === DEFAULT_CONFIGURATION.PLAYER1["ID"] ? DEFAULT_CONFIGURATION.PLAYER2["ID"] : DEFAULT_CONFIGURATION.PLAYER1["ID"]
 }
-function checkWinning(context, player) {
-    return context[player].onGamePieces.length < 3 && context[player].playedPieces == 9
+function checkTrappedPosition(context, player) {
+    if (context[player].playedPieces == 9) {
+        return context[player].onGamePieces.every(piece => PIECE_MOVEMENTS[piece].every(i => context.board[i] !== null))
+    }
 
+}
+function checkTwoPiecesRemaining(context, player) {
+    return context[player].onGamePieces.length < 3 && context[player].playedPieces == 9 || checkTrappedPosition(context, player)
+}
+
+// function checkWinner(context, player) {
+//     return checkTwoPiecesRemaining(context,player)||checkTrappedPosition(context, player);
+// }
+
+function setWinner(context, player) {
+    context[player].state = new Winner()
+    context[getOppositePlayer(player)].state = new Loser()
+    context.turn = null
+    context.winner = 1
+    return context
 }
 
 class Positioning {
@@ -34,7 +51,15 @@ class Positioning {
             return newContext
         }
         newContext.turn = getOppositePlayer(context.turn)
-        newContext[context.turn].state = context[context.turn].playedPieces == 9 ? new Playing() : new Positioning()
+        // checks for trapped state
+        if (context[context.turn].playedPieces == 9) {
+            if (checkTrappedPosition(newContext, getOppositePlayer(context.turn))) {
+                return setWinner(newContext, context.turn)
+            }
+            newContext[context.turn].state = new Playing();
+            return newContext
+        }
+        newContext[context.turn].state =new Positioning()
         return newContext
     }
     setPiece(index, context) {
@@ -60,12 +85,8 @@ class Eliminating {
             let newTurn = getOppositePlayer(context.turn)
             this.eliminatePiece(index, newContext, newTurn)
             // checks for winning condition
-            if (checkWinning(newContext, newTurn)) {
-                newContext[newTurn].state = new Loser()
-                newContext[context.turn].state = new Winner()
-                newContext.turn = null
-                newContext.winner = 1
-                return newContext
+            if (checkTwoPiecesRemaining(newContext, newTurn) || checkTrappedPosition(newContext, newTurn)) {
+                return setWinner(newContext, context.turn)
             }
             // updates states and turn
             newContext[context.turn].state = this.updateState(context, context.turn)
@@ -114,6 +135,11 @@ class Playing {
         let newContext = { ...context }
         this.movePiece(index, newContext)
 
+        // checks  for trapped condition
+        console.log(checkTrappedPosition(newContext, getOppositePlayer(context.turn)))
+        if (checkTrappedPosition(newContext, getOppositePlayer(context.turn))) {
+            return setWinner(newContext, context.turn)
+        }
         // check for elimination
         if (checkElimination(newContext.board, newContext.turn, index)) {
             let newState = new Eliminating()
