@@ -1,5 +1,5 @@
-import DEFAULT_CONFIGURATION from "../config/default_configuration.json"
 import { BOARD_COMBOS, PIECE_MOVEMENTS } from "../utils/constants"
+import { getOppositePlayer } from "../utils/utils"
 
 function checkElimination(board, turn, index) {
     const triples = BOARD_COMBOS
@@ -7,9 +7,6 @@ function checkElimination(board, turn, index) {
     return value
 }
 
-function getOppositePlayer(turn) {
-    return turn === DEFAULT_CONFIGURATION.PLAYER1["ID"] ? DEFAULT_CONFIGURATION.PLAYER2["ID"] : DEFAULT_CONFIGURATION.PLAYER1["ID"]
-}
 function checkTrappedPosition(context, player) {
     if (context[player].playedPieces == 9) {
         return context[player].onGamePieces.every(piece => PIECE_MOVEMENTS[piece].every(i => context.board[i] !== null))
@@ -19,10 +16,6 @@ function checkTrappedPosition(context, player) {
 function checkTwoPiecesRemaining(context, player) {
     return context[player].onGamePieces.length < 3 && context[player].playedPieces == 9 || checkTrappedPosition(context, player)
 }
-
-// function checkWinner(context, player) {
-//     return checkTwoPiecesRemaining(context,player)||checkTrappedPosition(context, player);
-// }
 
 function setWinner(context, player) {
     context[player].state = new Winner()

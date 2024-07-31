@@ -1,9 +1,8 @@
-import React, { useContext } from 'react';
+
 import styled from 'styled-components'
 import Piece from '../Board/Piece';
 
 const PieceKeeper = ({pieces,color}) => {
-    // const {gameState,_}=useContext(GameContext)
     return <CustomContainer>
         <CustomSVG>
             { 
@@ -11,7 +10,6 @@ const PieceKeeper = ({pieces,color}) => {
                 <Piece key={i} cx={50} cy={730-85*i} color={color} />
             ))
             }
-for 
         </CustomSVG>
     </CustomContainer>
 }
