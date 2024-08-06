@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import styled, { ThemeContext } from 'styled-components'
-import { Winner } from '../../logic/states'
 import useGame from '../../hooks/useGame'
 import Piece from '../Board/Piece'
 import DEFAULT_CONFIGURATION from '../../config/default_configuration.json'
@@ -9,12 +8,11 @@ const TurnPannel = () => {
   const { ID: player1, COLOR: colorPlayer1 } = DEFAULT_CONFIGURATION.PLAYER1
   const { ID: player2, COLOR: colorPlayer2 } = DEFAULT_CONFIGURATION.PLAYER2
 
-  const { gameState, _ } = useGame()
+  const { gameState} = useGame()
   const theme = useContext(ThemeContext)
 
   function handlePlayerIlumination(player) {
-    if (gameState[player].state instanceof Winner) return theme.FILTERS.WINNER
-
+    if (gameState.winner===player) return theme.FILTERS.WINNER
     return gameState.turn === player ? theme.FILTERS.SELECTED : theme.FILTERS.DEFAULT
   }
 

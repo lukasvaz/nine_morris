@@ -4,12 +4,22 @@ import './App.css'
 import { Board, TurnPannel, PieceKeeper } from './components'
 import useGame from './hooks/useGame'
 import DEFAULT_CONFIGURATION from './config/default_configuration.json'
+import { useEffect } from 'react'
 
 const App = (() => {
   const colorPlayer1 = DEFAULT_CONFIGURATION.PLAYER1.COLOR
   const colorPlayer2 = DEFAULT_CONFIGURATION.PLAYER2.COLOR
+  const {gameState, saveGameState} =useGame()
+  
+  useEffect(() => {
+    const handleRightClick = (event) => {
+      // event.preventDefault();
+      saveGameState();
+    };
+    window.addEventListener('beforeunload', handleRightClick);
+    return () => window.removeEventListener('contextmenu', handleRightClick);
+  }, [saveGameState]); 
 
-  const {gameState, _} =useGame()
   return (
     <ThemeProvider theme={theme}>
       <StyledApp className="App" >
