@@ -1,19 +1,3 @@
-//separar  logica  de movimientos por  estados:
- some methods
-  function getSelectedPiece(){
+Future Reinforcement Learning  bot:
 
-  }
-  function positionatePiece(){
-
-  }
-
-  function getAllowedPositions(){
-
-  }
-
-// - crear clase de  POSITIONING  (index ,board, turn)-> board,turn,state 
-// - crear  checker  para eliminar  piezas  (board) -> true false 
-// crear  ELIMINAtiNG (index ,board, turn)-> board ,turn,state 
-// -capturar  evento  click  fuera de pieza
-// - crear clase de  PLAYING (index ,board, turn)->  board ,turn,state 
-// - crear clase de ENDGAME (index ,board, turn)->  board ,turn,state 
+![image](https://github.com/user-attachments/assets/c0970a4d-baff-49d7-b0d5-d9bff882caf6)
