@@ -1,10 +1,9 @@
 import { createContext,useState } from "react";
 import DEFAULT_CONFIGURATION from "../config/default_configuration.json"
-
+import PropTypes from 'prop-types'
 const GameContext = createContext()
 
-
-const   GameProvider= ({children}) => {
+const  GameProvider= ({children}) => {
 const initialState={
     "winner": 0,
     "P1": { "state": "Positioning", "onGamePieces": [], "playedPieces": 0 },
@@ -27,4 +26,7 @@ return (
         </GameContext.Provider>
     )  
 } 
+GameProvider.propTypes = {
+    children: PropTypes.node.isRequired
+  }   
 export { GameProvider,GameContext}

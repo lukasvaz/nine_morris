@@ -12,7 +12,7 @@ const App = (() => {
   const {gameState, saveGameState} =useGame()
   
   useEffect(() => {
-    const handleRightClick = (event) => {
+    const handleRightClick = () => {
       // event.preventDefault();
       saveGameState();
     };
