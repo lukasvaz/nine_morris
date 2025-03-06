@@ -1,33 +1,15 @@
-import styled from 'styled-components'
-import Piece from '../Board/Piece';
+import Piece from "../Board/Piece";
 
-const PieceKeeper = ({pieces,color}) => {
-    return <CustomContainer>
-        <CustomSVG>
-            { 
-             Array.from({ length: pieces }).map((_, i) => (
-                <Piece key={i} cx={50} cy={730-85*i} color={color} />
-            ))
-            }
-        </CustomSVG>
-    </CustomContainer>
-}
-
-const CustomContainer = styled.div`
-display: flex;
-flex-direction: column;
-align-items: center;
-height: 100px;
-justify-content: center;
-border: 1px solid ${props => props.theme.COLORS.PRIMARY};
-border-radius: 20px;
-height:780px;
-width: 100px;
-`
-const CustomSVG = styled.svg`
-width: 100px;
-height: 780px;
-`
-
+const PieceKeeper = ({ pieces, color }) => {
+  return (
+    <div className="flex flex-col items-center justify-center rounded-xl height-780px width-100px  border-solid border-1 border-primary">
+      <svg className="w-[100px] h-[780px]">
+        {Array.from({ length: pieces }).map((_, i) => (
+          <Piece key={i} cx={50} cy={730 - 85 * i} color={color} />
+        ))}
+      </svg>
+    </div>
+  );
+};
 
 export default PieceKeeper;

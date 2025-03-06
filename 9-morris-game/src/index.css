@@ -1,15 +1,49 @@
+@import "tailwindcss";
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+@theme {
+  --color-primary: var(--primary-color);
+  --color_succes: var(--success-color);
+  --color-error: var(--error-color);
+
+  --color-selected-filter: var(--selected-filter);
+  --color-winner-filter: var(--winner-filter);
+  --color-eliminate-filter: var(--eliminate-filter);
+  --color-default-filter: var(--default-filter);
+
+  --color-theme-bg: var(--bg-color);
+  --color-text: var(--text-color);
+}
+
 :root {
   height: 100%;
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
+  color: var(--color-text);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* variables */
+  --bg-color: #f9f9f9;
+  --text-color: #272e33;
+  --primary-color: skyblue;
+  --success-color: lightgreen;
+  --error-color: red;
+
+  --filter-selected: drop-shadow(0px 0px 10px var(--primary-color));
+  --filter-winner: drop-shadow(0px 0px 10px var(--success-color));
+  --filter-eliminate: drop-shadow(0px 0px 10px var(--error-color));
+  --filter-default: none;
+}
+
+[data-theme="dark"] {
+  --bg-color: #1a1a1a;
+  --text-color: #f9f9f9;
 }
 
 a {
@@ -30,7 +64,7 @@ body {
   min-width: 320px;
   height: 100%;
   min-height: 100vh;
-  background-color: #272e33;
+  background-color: var(--bg-color);
 }
 
 h1 {
@@ -45,7 +79,6 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
 }
@@ -55,17 +88,4 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
 }
