@@ -1,3 +1,5 @@
+import React from 'react';
+
 const Piece = ({ cx, cy, color, handleClick, style }) => {
   const radius = 40;
   return (

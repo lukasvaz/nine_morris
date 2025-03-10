@@ -1,6 +1,7 @@
 import useGame from "../../hooks/useGame";
 import Piece from "../Board/Piece";
 import DEFAULT_CONFIGURATION from "../../config/default_configuration.json";
+import React from "react";
 
 const TurnPannel = () => {
   const { ID: player1, COLOR: colorPlayer1 } = DEFAULT_CONFIGURATION.PLAYER1;
@@ -23,14 +24,12 @@ const TurnPannel = () => {
           style={{ filter: handlePlayerIlumination(player1) }}
           cx={80}
           cy={50}
-          color={colorPlayer1}
-        ></Piece>
+          color={colorPlayer1} handleClick={undefined}        ></Piece>
         <Piece
           style={{ filter: handlePlayerIlumination(player2) }}
           cx={270}
           cy={50}
-          color={colorPlayer2}
-        ></Piece>
+          color={colorPlayer2} handleClick={undefined}        ></Piece>
       </svg>
     </div>
   );

@@ -2,6 +2,7 @@ import Piece from "./Piece";
 import useGame from "../../hooks/useGame";
 import { BOARD_GEOMETRY, PIECES_CORDINATES } from "../../utils/constants";
 import { getPieceColor, getOppositePlayer } from "../../utils/utils";
+import React from 'react';
 
 const Board = () => {
   const { gameState, updateContext } = useGame();

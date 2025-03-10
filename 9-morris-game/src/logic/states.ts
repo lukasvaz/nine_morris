@@ -24,12 +24,12 @@ function setWinner(context, player) {
 }
 
 class Positioning {
-    isValidMove(index, board, turn) {
+    isValidMove(index, board) {
         return board[index] == null
     }
     update(index, context) {
         // click on an ocupped position
-        if (!this.isValidMove(index, context.board, context.turn)) {
+        if (!this.isValidMove(index, context.board)) {
             return context
         }
         //update context
