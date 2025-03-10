@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import useGame from "../../hooks/useGame";
 import Piece from "../Board/Piece";
 import DEFAULT_CONFIGURATION from "../../config/default_configuration.json";
