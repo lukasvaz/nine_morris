@@ -16,7 +16,8 @@ const useGame = () => {
     Playing: playing,
     Ending: ending,
   };
-  function updateContext(index) {
+  
+  function updateContext(index:number) {
     const newContext = !gameState.winner
       ? availableStates[gameState[gameState.turn].state].update(
           index,

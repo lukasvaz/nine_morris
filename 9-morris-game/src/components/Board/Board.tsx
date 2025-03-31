@@ -6,8 +6,8 @@ import React from 'react';
 
 const Board = () => {
   const { gameState, updateContext } = useGame();
-  function handleIlumination(index) {
-    if (gameState.winner !== 0) {
+  function handleIlumination(index:number) {
+    if (gameState.winner !== null) {
       return "var(--filter-default)";
     }
     if (gameState[gameState.turn].state === "Eliminating") {

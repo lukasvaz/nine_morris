@@ -1,33 +1,33 @@
 import { BOARD_COMBOS, PIECE_MOVEMENTS } from "../utils/constants"
 import { getOppositePlayer } from "../utils/utils"
+import { GameState, PlayerState, PlayerType } from "../types/types"
 
-function checkElimination(board, turn, index) {
+function checkElimination(board: GameState['board'], turn: GameState["turn"], index:number) {
     const triples = BOARD_COMBOS
     var value = triples[index].some(triple => triple.every(i => board[i] === turn)) ? true : false
     return value
 }
 
-function checkTrappedPosition(context, player) {
+function checkTrappedPosition(context:GameState, player:PlayerType) {
     if (context[player].playedPieces == 9) {
         return context[player].onGamePieces.every(piece => PIECE_MOVEMENTS[piece].every(i => context.board[i] !== null))
     }
 
 }
-function checkTwoPiecesRemaining(context, player) {
+function checkTwoPiecesRemaining(context:GameState , player:PlayerType) {
     return context[player].onGamePieces.length < 3 && context[player].playedPieces == 9 || checkTrappedPosition(context, player)
 }
 
-function setWinner(context, player) {
-    context.turn = null
+function setWinner(context:GameState, player: PlayerType) {
     context.winner = player
     return context
 }
 
 class Positioning {
-    isValidMove(index, board) {
+    isValidMove(index:number, board:GameState['board']) {
         return board[index] == null
     }
-    update(index, context) {
+    update(index:number, context:GameState) {
         // click on an ocupped position
         if (!this.isValidMove(index, context.board)) {
             return context
@@ -36,35 +36,37 @@ class Positioning {
         let newContext = { ...context }
         this.setPiece(index, newContext)
         //if theres any elimination  change state to Eliminating
-        if (checkElimination(newContext.board, newContext.turn, index)) {
-            let newState = "Eliminating"
-            newContext[context.turn].state = newState
-            return newContext
-        }
-        newContext.turn = getOppositePlayer(context.turn)
-        // checks for trapped state
-        if (context[context.turn].playedPieces == 9) {
-            if (checkTrappedPosition(newContext, getOppositePlayer(context.turn))) {
-                return setWinner(newContext, context.turn)
+            if (checkElimination(newContext.board, newContext.turn, index)) {
+                let newState = "Eliminating" as PlayerState
+                newContext[context.turn].state = newState
+                return newContext
             }
-            newContext[context.turn].state = "Playing";
-            return newContext
-        }
-        newContext[context.turn].state ="Positioning"
+            newContext.turn = getOppositePlayer(context.turn)
+            // checks for trapped state
+            if (context[context.turn].playedPieces == 9) {
+                if (checkTrappedPosition(newContext, getOppositePlayer(context.turn))) {
+                    return setWinner(newContext, context.turn)
+                }
+                newContext[context.turn].state = "Playing";
+                return newContext
+            }
+            newContext[context.turn].state ="Positioning"
         return newContext
     }
-    setPiece(index, context) {
+    setPiece(index:number, context:GameState) {
         context.board[index] = context.turn
+        if (context.turn !== null) {
         context[context.turn].onGamePieces.push(index)
         context[context.turn].playedPieces += 1
     }
 }
+}
 
 class Eliminating {
-    isValidMove(index, board, turn) {
+    isValidMove(index:number, board:GameState['board'],turn:PlayerType) {
         return board[index] == getOppositePlayer(turn)
     }
-    update(index, context) {
+    update(index:number, context:GameState) {
         // click on an invalid position
         if (!this.isValidMove(index, context.board, context.turn)) {
             return context
@@ -87,7 +89,7 @@ class Eliminating {
         }
 
     }
-    updateState(context, player) {
+    updateState(context:GameState, player:PlayerType) {
         switch (true) {
             case context[player].onGamePieces.length <= 3 && context[player].playedPieces == 9:
                 return "Ending";
@@ -97,21 +99,21 @@ class Eliminating {
                 return "Positioning";
         }
     }
-    eliminatePiece(index, context, player) {
+    eliminatePiece(index:number, context:GameState, player:PlayerType) {
         context.board[index] = null
         context[player].onGamePieces = context[player].onGamePieces.filter(i => i !== index)
     }
 }
 
 class Playing {
-    isValidMove(index, board, turn,selectedPiece) {
+    isValidMove(index:number, board:GameState['board'], turn:PlayerType,selectedPiece:GameState['selectedPiece']) {
         if (selectedPiece === null) {
             return board[index] === turn
         }
         return PIECE_MOVEMENTS[selectedPiece].includes(index) && board[index] === null
     }
 
-    update(index, context) {
+    update(index:number, context:GameState) {
         if (!this.isValidMove(index, context.board, context.turn,context.selectedPiece)) {
             context.selectedPiece = null
             return context
@@ -131,7 +133,7 @@ class Playing {
         }
         // check for elimination
         if (checkElimination(newContext.board, newContext.turn, index)) {
-            let newState = "Eliminating"
+            let newState = "Eliminating" as PlayerState
             newContext[context.turn].state = newState
             return newContext
         }
@@ -139,8 +141,10 @@ class Playing {
         newContext.turn = getOppositePlayer(context.turn)
         return newContext
     }
-    movePiece(index, context) {
-        context.board[context.selectedPiece] = null
+    movePiece(index:number, context:GameState) {
+        if (context.selectedPiece !== null) {
+            context.board[context.selectedPiece] = null
+        }
         context.board[index] = context.turn
         context[context.turn].onGamePieces = context[context.turn].onGamePieces.map(i => i === context.selectedPiece ? index : i)
         context.selectedPiece = null
@@ -149,13 +153,13 @@ class Playing {
 
 class Ending {
     
-    isValidMove(index, board, turn,selectedPiece) {
+    isValidMove(index:number, board:GameState['board'], turn:PlayerType,selectedPiece:GameState['selectedPiece']) {
         if (selectedPiece === null) {
             return board[index] === turn
         }
         return board[index] === null
     }
-    update(index, context) {
+    update(index:number, context:GameState) {
         if (!this.isValidMove(index, context.board, context.turn,context.selectedPiece)) {
             context.selectedPiece = null
             return context
@@ -170,7 +174,7 @@ class Ending {
         this.movePiece(index, newContext)
         // check for elimination
         if (checkElimination(newContext.board, newContext.turn, index)) {
-            let newState = "Eliminating"
+            let newState = "Eliminating" as PlayerState
             newContext[context.turn].state = newState
             return newContext
         }
@@ -179,8 +183,10 @@ class Ending {
         return newContext
     }
 
-    movePiece(index, context) {
+    movePiece(index:number, context:GameState) {
+        if (context.selectedPiece !== null) {
         context.board[context.selectedPiece] = null
+        }
         context.board[index] = context.turn
         context[context.turn].onGamePieces = context[context.turn].onGamePieces.map(i => i === context.selectedPiece ? index : i)
         context.selectedPiece = null

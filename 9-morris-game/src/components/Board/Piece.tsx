@@ -1,6 +1,15 @@
 import React from 'react';
 
-const Piece = ({ cx, cy, color, handleClick, style }) => {
+type PieceProps = {
+  cx: number;
+  cy: number;
+  color: string;
+  handleClick: () => void;
+  style: React.CSSProperties|undefined;
+};
+  
+
+const Piece :React.FC<PieceProps> = ({ cx, cy, color, handleClick, style }) => {
   const radius = 40;
   return (
     <circle

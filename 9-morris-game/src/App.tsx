@@ -1,9 +1,9 @@
 import "./App.css";
-import { Board, TurnPannel, PieceKeeper } from "./components";
-import useGame from "./hooks/useGame";
-import DEFAULT_CONFIGURATION from "./config/default_configuration.json";
+import { Board, TurnPannel, PieceKeeper } from "./components/index.js";
+import useGame from "./hooks/useGame.tsx";
+import {DEFAULT_CONFIGURATION} from "./config/default_configuration.ts";
 import { useEffect } from "react";
-import { ThemeContext } from "./context/ThemeContext";
+import { ThemeContext } from "./context/ThemeContext.tsx";
 import { useContext } from "react";
 const App = () => {
   const colorPlayer1 = DEFAULT_CONFIGURATION.PLAYER1.COLOR;
