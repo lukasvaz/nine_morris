@@ -41,7 +41,7 @@ const useGame = () => {
     setGameState({ ...newContext });
   }
   function saveGameState() {
-    localStorage.setItem("gameState", JSON.stringify(latestGameStateRef.current));
+    localStorage.setItem("gameState", JSON.stringify(currentGameStateRef.current));
   }
   function resetGame() {
     setGameState(INITIAL_STATE);
