@@ -1,23 +1,21 @@
 import "./App.css";
-import { Board, TurnPannel, PieceKeeper } from "./components/index.js";
+import React from "react";
+import { Board, TurnPannel, PieceKeeper } from "./components";
 import useGame from "./hooks/useGame.tsx";
 import {DEFAULT_CONFIGURATION} from "./config/default_configuration.ts";
 import { useEffect } from "react";
-import { ThemeContext } from "./context/ThemeContext.tsx";
-import { useContext } from "react";
+import useTheme from "./hooks/useTheme.tsx";
+
 const App = () => {
   const colorPlayer1 = DEFAULT_CONFIGURATION.PLAYER1.COLOR;
   const colorPlayer2 = DEFAULT_CONFIGURATION.PLAYER2.COLOR;
-  const { gameState, saveGameState } = useGame();
-  const { theme, toggleTheme } = useContext(ThemeContext);
-
+  const { gameState,resetGame,saveGameState } = useGame();
+  const { theme, toggleTheme } = useTheme();
+  
   useEffect(() => {
-    const handleRightClick = () => {
-      saveGameState();
-    };
-    window.addEventListener("beforeunload", handleRightClick);
-    return () => window.removeEventListener("contextmenu", handleRightClick);
-  }, [saveGameState]);
+    window.addEventListener("beforeunload",saveGameState);
+    return () => window.removeEventListener("beforeunload",saveGameState);
+  }, []);
 
   return (
     <div className="flex flex-col items-center justify-center h-full">
@@ -34,6 +32,11 @@ const App = () => {
           color={colorPlayer2}
         />
       </div>
+      {gameState.winner && (
+        <button onClick={resetGame}>
+          Reset
+        </button>
+      )}
     </div>
   );
 };

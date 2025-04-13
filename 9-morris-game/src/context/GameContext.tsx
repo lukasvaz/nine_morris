@@ -1,6 +1,6 @@
 import React, { createContext, useState, ReactNode  } from "react";
-import {DEFAULT_CONFIGURATION} from "../config/default_configuration";
 import { GameState } from "../types/types";
+import useGame from "../hooks/useGame";
 
 interface GameProviderProps {
   children: ReactNode;
@@ -13,20 +13,7 @@ setGameState: React.Dispatch<React.SetStateAction<GameState>>;
 
 const GameContext = createContext<GameContextProps>({} as GameContextProps);
 const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
-  const initialState:GameState = {
-    winner: null,
-    P1: { state: "Positioning", onGamePieces: [], playedPieces: 0 },
-    P2: { state: "Positioning", onGamePieces: [], playedPieces: 0 },
-    board: Array(24).fill(null),
-    turn: DEFAULT_CONFIGURATION.PLAYER1["ID"],
-    selectedPiece: null,
-  };
-  function getInitialState(): GameState {
-    const savedState = localStorage.getItem("gameState");
-    localStorage.removeItem("gameState");
-    console.log(savedState);
-    return savedState ? JSON.parse(savedState) : initialState;
-  }
+const {getInitialState} = useGame();
   
   const [gameState, setGameState] = useState(getInitialState);
 

@@ -1,11 +1,23 @@
+import { GameState } from "../types/types";
+import { DEFAULT_CONFIGURATION } from "../config/default_configuration";
+import { PlayerState } from "../types/types";
 
-const PIECES_CORDINATES = [[50, 50], [350, 50], [650, 50], [150, 150], [350, 150],
+export const INITIAL_STATE:Readonly<GameState> = Object.freeze({
+    winner: null,
+    P1: { state: "Positioning" as PlayerState, onGamePieces: [], playedPieces: 0 },
+    P2: { state: "Positioning" as PlayerState, onGamePieces: [], playedPieces: 0 },
+    board: Array(24).fill(null),
+    turn: DEFAULT_CONFIGURATION.PLAYER1["ID"],
+    selectedPiece: null,
+  });
+
+export const PIECES_CORDINATES = [[50, 50], [350, 50], [650, 50], [150, 150], [350, 150],
 [550, 150], [250, 250], [350, 250], [450, 250], [50, 350], [150, 350], [250, 350],
 [450, 350], [550, 350], [650, 350], [250, 450], [350, 450], [450, 450], [150, 550],
 [350, 550], [550, 550], [50, 650], [350, 650], [650, 650]]
 
 
-const BOARD_GEOMETRY = [
+export const BOARD_GEOMETRY = [
     { "x1": 50, "y1": 50, "x2": 650, "y2": 50 },
     { "x1": 650, "y1": 50, "x2": 650, "y2": 650 }, { "x1": 650, "y1": 650, "x2": 50, "y2": 650 },
     { "x1": 50, "y1": 650, "x2": 50, "y2": 50 }, { "x1": 350, "y1": 50, "x2": 350, "y2": 250 },
@@ -16,7 +28,7 @@ const BOARD_GEOMETRY = [
     { "x1": 450, "y1": 250, "x2": 450, "y2": 450 }, { "x1": 450, "y1": 450, "x2": 250, "y2": 450 },
     { "x1": 250, "y1": 450, "x2": 250, "y2": 250 }]
 
-const BOARD_COMBOS = [[
+export const BOARD_COMBOS = [[
     [0, 1, 2], [0, 9, 21]],
 [[0, 1, 2], [1, 4, 7]],
 [[0, 1, 2], [2, 14, 23]],
@@ -42,7 +54,7 @@ const BOARD_COMBOS = [[
 [[21, 22, 23], [16, 19, 22]],
 [[21, 22, 23], [2, 14, 23]]]
 
-const PIECE_MOVEMENTS = [
+export const PIECE_MOVEMENTS = [
     [1, 9], [0, 2, 4], [1, 14],
     [4, 10], [3, 5, 7, 1], [4, 13], [7, 11],
     [4, 6, 8], [7, 12], [0, 10, 21], [3, 9, 18, 11],
@@ -51,4 +63,3 @@ const PIECE_MOVEMENTS = [
     [19,13], [9,22], [19,21, 23], [14, 22]
 ]
 
-export { PIECES_CORDINATES, BOARD_GEOMETRY, BOARD_COMBOS, PIECE_MOVEMENTS } 
